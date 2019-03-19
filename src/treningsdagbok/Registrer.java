@@ -9,6 +9,8 @@ public class Registrer extends DBConn {
 
     Statement statement = null;
 
+    //Registrer treningsøkter, apparater og øvelser
+
     public void registrer_treningsokt(Date tidsstempel, int varighet, int form, int prestasjon, String notat){
         try{
             String query = "INSERT INTO Treningsokt(Tidsstempel, Varighet, Form, Prestasjon, Notat)"
@@ -22,7 +24,7 @@ public class Registrer extends DBConn {
 
     }
 
-    public void registrer_apparat(int pparatid, String apparat_navn) {
+    public void registrer_apparat(int apparatid, String apparat_navn) {
         try {
             String query = "INSERT INTO Apparat "
                             + "VALUES (" + apparatid + ", '" +apparat_navn+"')";
