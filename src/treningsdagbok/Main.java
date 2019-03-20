@@ -5,14 +5,17 @@ import java.sql.Statement;
 import java.util.Scanner;
 import Registrer;
 import HentTreningsOkt;
+import Treningslogg;
 
 class Main() {
 
 
     public static void main(String[] args){
 
+        Connection conn = new Connection(); // dette du tenker på odd?
         Scanner scanner = new Scanner(System.in);
         System.out.println("//********TRENINGSDAGBOK*******/")
+
 
         while(true){
             System.out.println("VELG HVA DU VIL GJØRE: \n"
@@ -104,6 +107,26 @@ class Main() {
 
             if(valg == 3){
 
+                Treningslogg trlogg = new Treningslogg();
+
+
+                System.out.println("Navn på øvelse du ønsker å se resultatlogg for: ");
+                String navn = scanner.next();
+                System.out.println("Start dato(YYYY-MM-DD): ");
+                String start = scanner.next();
+                System.out.println("Slutt dato(YYYY-MM-DD): ");
+                String slutt = scanner.next();
+                System.out.print("Stigende eller synkende(0 eller 1): ");
+                int b = scanner.nextInt();
+                Boolean asc = false;
+                if( b == 0 ){
+                    asc = true;
+                }
+
+                trlogg.getTreningsLogg(conn, navn, start, slutt, asc);
+
+
+
 
             }
 
@@ -115,6 +138,16 @@ class Main() {
 
 
             if(valg == 5){
+                Gjennomsnitt gs = new Gjennomsnitt();
+
+                System.out.println("Start: ");
+                String start = scanner.next();
+                System.out.println("Slutt: ");
+                String slutt = scanner.next();
+
+                gs.getGjennomsnitt(conn, start, slutt);
+                
+
 
 
             }
