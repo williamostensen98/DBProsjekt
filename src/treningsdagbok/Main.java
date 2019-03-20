@@ -146,7 +146,7 @@ class Main() {
                 String slutt = scanner.next();
 
                 gs.getGjennomsnitt(conn, start, slutt);
-                
+
 
 
 
