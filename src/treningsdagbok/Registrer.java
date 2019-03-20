@@ -24,10 +24,10 @@ public class Registrer extends DBConn {
 
     }
 
-    public void registrer_apparat(int apparatid, String apparat_navn) {
+    public void registrer_apparat(String apparat_navn) {
         try {
             String query = "INSERT INTO Apparat "
-                            + "VALUES (" + apparatid + ", '" +apparat_navn+"')";
+                            + "VALUES ('" +apparat_navn+"')";
             statement = conn.createStatement();
             statement.executeUpdate(query);
         }
@@ -36,10 +36,10 @@ public class Registrer extends DBConn {
         }
     }
 
-    public void registrer_ovelse(int ovelsesid, String ovelse_navn) {
+    public void registrer_ovelse(String ovelse_navn , String beskrivelse, int antall_kilo, int antall_sett, int type, int apparatid) {
         try {
             String query = "INSERT INTO Ovelse "
-                             + "VALUES ("+ ovelsesid + ", '" +ovelse_navn+"')";
+                             + "VALUES ('"+ ovelses_navn + "', '"+beskrivelse+"', "+antall_kilo+", "+antall_sett+", "+type+","+apparatid+")";
             statement = conn.createStatement();
             statement.executeUpdate(query);
         }
