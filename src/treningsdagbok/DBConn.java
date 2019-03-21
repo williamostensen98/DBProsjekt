@@ -7,7 +7,7 @@ import java.util.Properties;
 public class DBConn {
 
 
-    Connection conn = null;
+	Connection conn = null;
 
     public void connect() {
         String user = "<user>";
