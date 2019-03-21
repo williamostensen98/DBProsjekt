@@ -26,6 +26,10 @@ public class Gjennomsnitt {
         for(int i:values){
             temp+=i;
         }
-        System.out.println("Gjennomsnittlig form i periode "+start+" - "+end+": "+(temp/values.size()));
+        if(values.size()==0){
+            System.out.println("Ingen resultater i perioden");
+        }else {
+            System.out.println("Gjennomsnittlig form i periode " + start + " - " + end + ": " + (temp / values.size()));
+        }
     }
 }
