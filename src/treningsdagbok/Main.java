@@ -133,6 +133,22 @@ class Main() {
 
             if(valg == 4){
 
+                NyOvelsegruppe ovgr = new NyOvelsegruppe();
+
+                System.out.println("Vil du 1: Opprette ny øvelsegruppe eller 2: hente ut øvelse fra gruppe");
+                int alt = scanner.nextInt();
+                if(alt == 1){
+                    System.out.println("Hva skal gruppen hete?");
+                    String navn = scanner.next();
+                    ovgr.nyOvelseGruppe(navn);
+
+        }
+                if(alt == 2){
+                    System.out.println("GruppeId: ");
+                    int id = scanner.nextInt();
+                    ovgr.finnOvelserIGruppe(id);
+        }
+
 
             }
 
