@@ -86,4 +86,23 @@ public class NyOvelsegruppe extends DBConn {
     	}
 		return null;
     }
+    
+    public String finnOvelserIGruppe(int gruppeID) {
+    	String query = String.format("SELECT Navn FROM ØvelseIGruppe WHERE GruppeID = %d", gruppeID);
+    	try {
+			Statement statement = conn.createStatement();
+			statement.execute(query);
+	   	 	rs  = statement.getResultSet();
+	   	 	String result = "";
+	   	 	while (rs.next()) {
+	   	 		result += rs.getString(1) + "\n";
+	   	 	}
+	   	 	System.out.println(result);
+	   	 	return result;
+		} 
+    	catch (SQLException e) {
+			System.out.println("SQLException " + e.getMessage());
+		}
+    	return null;
+    }
 }
