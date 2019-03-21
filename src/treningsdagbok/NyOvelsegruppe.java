@@ -1,15 +1,30 @@
 package treningsdagbok;
 
 import java.sql.*;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class NyOvelsegruppe extends DBConn {
 	
 	ResultSet rs = null;
 	
-	  // Legger til en ny gruppe i OvelseGruppe hvis den ikke finnes fra før
+	// Finner gruppeID ved hjelp av gruppeNavn
+	public int getGruppeID(String gruppeNavn) throws SQLException {
+	    String query = String.format("SELECT GruppeID FROM ØvelseGruppe WHERE Muskelgruppe = %s", gruppeNavn);
+	    Statement statement = conn.createStatement();
+	    statement.execute(query);
+   	 	rs  = statement.getResultSet();
+   	 	return rs.getInt(1);
+	}
+	
+	// Finner gruppeNavn ved hjelp av gruppeID
+	public String getGruppeNavn(int gruppeID) throws SQLException {
+		String query = String.format("SELECT GruppeID FROM ØvelseGruppe WHERE Muskelgruppe = %s", gruppeID);
+	    Statement statement = conn.createStatement();
+	    statement.execute(query);
+   	 	rs  = statement.getResultSet();
+   	 	return rs.getString(1);
+	}
+	
+	// Legger til en ny gruppe i OvelseGruppe hvis den ikke finnes fra før
     public void nyOvelseGruppe(String gruppeNavn) {
         try {    
             String query = String.format("SELECT Muskelgruppe FROM ØvelseGruppe WHERE Muskelgruppe = %s", gruppeNavn);
@@ -28,8 +43,8 @@ public class NyOvelsegruppe extends DBConn {
     }
     
     // Henter ut gruppeID basert paa gruppeNavn, og setter saa inn (gruppeID, ovelseNavn) i OvelseIGruppe
-    public void leggTilOvelseIGruppe(String gruppeNavn, String ovelseNavn) {
-         try {
+    public void leggTilOvelseIGruppe(String gruppeNavn, String ovelseNavn) { 
+    	try {
         	 String query = String.format("SELECT GruppeID FROM ØvelseGruppe WHERE Muskelgruppe = %s", gruppeNavn);
         	 Statement statement = conn.createStatement();
         	 if (!statement.execute(query)) {
@@ -48,25 +63,17 @@ public class NyOvelsegruppe extends DBConn {
 		}
     }
     
-    // Henter ut gruppeNavn basert paa gruppeID, og setter saa inn (gruppeID, ovelseNavn) i OvelseIGruppe.
-    // gruppeNavn hentes ut for aa printes ut saa man faar output som kan vise om man satte inn i onsket gruppe
+    // Finner GruppeNavn ved hjelp av finnGruppeNavn, og kjorer saa leggTilOvelseIGruppe med (gruppeNavn, ovelseNavn)
     public void leggTilOvelseIGruppe(int gruppeID, String ovelseNavn) {
     	try {
-    		String query = String.format("INSERT INTO Muskelgruppe FROM ØvelseGruppe WHERE GruppeID = %d", gruppeID);
-       	 	Statement statement = conn.createStatement();
-       	 	statement.execute(query);
-       	 	rs  = statement.getResultSet();
-       	 	String gruppeNavn = rs.getString(2);			// Henter ut gruppeNavn
-       	 	String update = String.format("INSERT INTO ØvelseIGruppe VALUES(%d, '%s');", gruppeID, ovelseNavn );
-       	 	statement.executeUpdate(update);
-       	 	System.out.println(String.format("Øvelse: %s er satt inn i gruppe: %d (%s)", ovelseNavn, gruppeID, gruppeNavn));
-    	}
-    	catch (SQLException e) {
-    		System.out.println("SQLException " + e.getMessage());
-    	}
+			leggTilOvelseIGruppe(getGruppeNavn(gruppeID), ovelseNavn);
+		} catch (SQLException e) {
+			System.out.println("SQLException " + e.getMessage());
+		}
     }
     
-    public String finnOvelserIGruppe(String ovelseNavn) {
+    // Finner andre ovelser i samme gruppe som oppgitt ovelse
+    public String finnAndreOvelserIGruppe(String ovelseNavn) {
     	try {
 	    	String query = String.format("SELECT Navn FROM ØvelseIGruppe WHERE GruppeID = "
 	    			+ "(SELECT GruppeID FROM ØvelseIGruppe WHERE Navn = '%s');", ovelseNavn);
@@ -87,6 +94,7 @@ public class NyOvelsegruppe extends DBConn {
 		return null;
     }
     
+    // Finner ovelser i en gruppe ved hjelp av gruppeID
     public String finnOvelserIGruppe(int gruppeID) {
     	String query = String.format("SELECT Navn FROM ØvelseIGruppe WHERE GruppeID = %d", gruppeID);
     	try {
@@ -101,6 +109,17 @@ public class NyOvelsegruppe extends DBConn {
 	   	 	return result;
 		} 
     	catch (SQLException e) {
+			System.out.println("SQLException " + e.getMessage());
+		}
+    	return null;
+    }
+    
+    // Finner ovelser i en gruppe ved hjelp av gruppeNavn
+    // Finner gruppeID ved hjelp av gruppeNavn, og finner saa ovelser i denne gruppen
+    public String finnOvelserIGruppe(String gruppeNavn) {
+    	try {
+			return finnOvelserIGruppe(getGruppeID(gruppeNavn));
+		} catch (SQLException e) {
 			System.out.println("SQLException " + e.getMessage());
 		}
     	return null;
